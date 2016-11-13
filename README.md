@@ -8,6 +8,8 @@ like to incorporate a second philosophy text. This should be interesting as anot
 *Most of these sentences sound quite incoherent. With a larger text i'd be able to make more sense. I'm thinking of using Proverbs from the Bible or possibly Siddhartha.
 
 ![](/markov1.png)
+
 ![](/markov2.png)
+
 ![](/markov3.png)
 
