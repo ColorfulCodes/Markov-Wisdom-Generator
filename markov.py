@@ -1,106 +1,104 @@
-# coding: utf-8
+import random
+from itertools import izip
+tao = []
 
-# In[48]:
+def read_file():
+    with open('/home/jhilene/markov/taotc.txt', 'r') as f, open('/home/jhilene/markov/prov.txt', 'r') as f2, open('/home/jhilene/markov/dh.txt') as f3:
 
-poem = """Let me die a youngman's death
-not a clean and in between
-the sheets holywater death
-not a famous-last-words
-peaceful out of breath death
-
-When I'm 73
-and in constant good tumour
-may I be mown down at dawn
-by a bright red sports car
-on my way home
-from an allnight party
-
-Or when I'm 91
-with silver hair
-and sitting in a barber's chair
-may rival gangsters
-with ham-fisted tommyguns burst in
-and give me a short back and insides
-
-Or when I'm 104
-and banned from the Cavern
-may my mistress
-catching me in bed with her daughter
-and fearing for her son
-cut me up into little pieces
-and throw away every piece but one
-
-Let me die a youngman's death
-not a free from sin tiptoe in
-candle wax and waning death
-not a curtains drawn by angels borne
-'what a nice way to go' death
-Roger McGough"""
-
-poem = poem.lower().split()
-print poem
+        #file2string = "".join([x for x in f2])
 
 
-# In[49]:
+        for x, y, z in izip(f, f2, f3):
+            x = x.replace(".", " .")
+            y = y.replace(".", " .")
+            z = z.replace(".", " .")
+            for word in x.lower().strip().split():
+            #empty.append(line.split())
+                tao.append(word)
+            for word in y.lower().strip().split():
+                tao.append(word)
+            for word in z.lower().strip().split():
+                tao.append(word)
+        print tao
 
-words = {}
-for i in poem:
-    if i[0] == 'a':
-        words['a'] == i
-    print words
+read_file()
+
+master_dict = {}
+total = 0
+for i in range(len(tao)-1):
+    j = i + 1
+    t_w = tao[i]
+    j_w = tao[j]
+    if t_w not in master_dict:
+        master_dict[t_w] = {'_total':0}
+    w_d = master_dict[t_w]
+
+    if j_w not in w_d:
+       w_d[j_w] = 0
+    if j_w in w_d:
+        w_d[j_w] += 1
+        w_d['_total'] += 1
+
+#print master_dict
+
+for i in master_dict:
+    #print k
+    #print master_dict[i]['total']
+    for k,v in master_dict[i].iteritems():
+        if k != '_total':
+            fraction = float(v)/float(master_dict[i]['_total'])
+            value = master_dict[i]
+            value[k] = fraction
+            #print k, fraction
+
+#print master_dict
+
+def weighted_choice(choices):
+   total = sum(w for c, w in choices.iteritems() if c != '_total')
+   r = random.uniform(0, total)
+   #print choices
+   #print r
+   upto = 0
+   for c, w in choices.iteritems():
+      if c == '_total':
+        continue
+      if upto + w >= r:
+         #print c
+         return c
+      upto += w
+   assert False, "Shouldn't get here"
+
+# [ a a a b b c c c c c ]
+
+# { 1: a, 4: b, 6: c }
+
+# [ a * * b * c * * * * ]
 
 
-# In[50]:
-
-twist = filter(lambda x: not(x == ',' or x == ' ' or x == '.' or x.isdigit()), poem)
-print twist
+for i in range(20):
+   weighted_choice(master_dict['compassion'])
 
 
-# In[81]:
+def generate_sentence():
+    #w = random.choice(master_dict.keys())
+    w = weighted_choice(master_dict['.'])
+    string = ''
+    #for i in range(9):
+        #string+= (w)
 
-words = {}
-for word in twist:
-    letter = word[0]
-    try:
-        words[letter].append(word)
-    except:
-        words[letter] = [word]
-print words
+    while True:
+        if w  in ['.','!','?',',']:
+            string += w
+            break
+        string+=(' ')
+        string+= (w)
+        w = weighted_choice(master_dict[w])
+    return string[1:].capitalize()
 
-
-# ### words
-# * it's a dict
-# * the key is a letter
-# * the value is a list
-#
-# ### counter (function)
-# * Counter takes a list
-#
-# ### count
-# * it's a dict
-#
-# # goal:
-# * you want to pass a dict with the values that are lists
-# * and you want to return a dict, where the values are dicts
-# * The return dict values, look like count
-
-# In[107]:
-
-#{a: {apples: 2, and: 1, animals:1, are:2},f:{fruits:1},g:{good:1},n:{not:1}}
-def counter(words_list):
-    count = {}
-    for w in words_list:
-        if w in count:
-            count[w] += 1
-        else:
-            count[w] = 1
-
-    return count
-
-counts = {}
-for key, value in words.iteritems():
-    counting = counter(value)
-    counts[key] = counting
+for i in range(3):
+    print i
+    #if i.len() <= 160:
+    print generate_sentence()
 
 
-print counts
+#  To make smarter have word frequency prefer nouns that follow other thingys. Have a larger data set.
