@@ -1,8 +1,10 @@
 import random
 from itertools import izip
+# Creat empty list to add words after split
 tao = []
 
 def read_file():
+    # read files from three texts: Proverbs, Tao Te Ching, Dharmasala
     with open('/home/jhilene/markov/taotc.txt', 'r') as f, open('/home/jhilene/markov/prov.txt', 'r') as f2, open('/home/jhilene/markov/dh.txt') as f3:
 
         #file2string = "".join([x for x in f2])
