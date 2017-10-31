@@ -11,3 +11,5 @@ Twitterbot is @Aloidias. Please, join us.
 ![](/markov2.png)
 
 ![](/markov3.png)
+
+![](/markov4.png)

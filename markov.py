@@ -9,10 +9,11 @@ tao = []
 
 def read_file():
     # read files from three texts: Proverbs, Tao Te Ching, Dharmasala
-    with open('/home/user/markov/prov.txt', 'r') as f, open('/home/user/markov/taotc.txt', 'r') as f2, open('/home/user/markov/dh.txt') as f3:
+    with open('/home/user/markov/Proverbs.txt', 'r') as f, open('/home/user/markov/taotc.txt', 'r') as f2, open('/home/user/markov/dhammapada.txt') as f3:
 
         #file2string = "".join([x for x in f2])
         """
+
         for x in f:
             x = x.replace(".", " .")
             for word in x.lower().strip().split():
@@ -31,7 +32,6 @@ def read_file():
             for word in z.lower().strip().split():
                 tao.append(word)
         #print tao
-
 read_file()
 
 master_dict = {}
@@ -98,7 +98,7 @@ def generate_sentence():
         #string+= (w)
 
     while True:
-        if w  in ['.','!','?',',']:
+        if w in ['.','!','?',',', ";"]:
             string += w
             break
         string+=(' ')
@@ -113,8 +113,12 @@ while stop:
     if len(hold) <= 160:
         #api.update_status(hold)
         #time.sleep(900)#Tweet every 15 minutes
-        print hold
-        stop = False
+        if len(hold) <= 152:
+            print hold + " #wisdom"
+            stop = False
+        else:
+            print hold
+            stop = False
     else:
         hold = generate_sentence()
 
