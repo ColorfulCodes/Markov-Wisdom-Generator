@@ -1,15 +1,24 @@
 import random
 from itertools import izip
+
+#Tweepy Magic
+# -*- coding: utf-8 -*-
+
 # Creat empty list to add words after split
 tao = []
 
 def read_file():
     # read files from three texts: Proverbs, Tao Te Ching, Dharmasala
-    with open('/home/jhilene/markov/taotc.txt', 'r') as f, open('/home/jhilene/markov/prov.txt', 'r') as f2, open('/home/jhilene/markov/dh.txt') as f3:
+    with open('/home/user/markov/prov.txt', 'r') as f, open('/home/user/markov/taotc.txt', 'r') as f2, open('/home/user/markov/dh.txt') as f3:
 
         #file2string = "".join([x for x in f2])
+        """
+        for x in f:
+            x = x.replace(".", " .")
+            for word in x.lower().strip().split():
+                tao.append(word)
 
-
+"""
         for x, y, z in izip(f, f2, f3):
             x = x.replace(".", " .")
             y = y.replace(".", " .")
@@ -21,7 +30,7 @@ def read_file():
                 tao.append(word)
             for word in z.lower().strip().split():
                 tao.append(word)
-        print tao
+        #print tao
 
 read_file()
 
@@ -76,10 +85,10 @@ def weighted_choice(choices):
 
 # [ a * * b * c * * * * ]
 
-
+"""
 for i in range(20):
    weighted_choice(master_dict['compassion'])
-
+"""
 
 def generate_sentence():
     #w = random.choice(master_dict.keys())
@@ -97,10 +106,18 @@ def generate_sentence():
         w = weighted_choice(master_dict[w])
     return string[1:].capitalize()
 
-for i in range(3):
-    print i
-    #if i.len() <= 160:
-    print generate_sentence()
+stop = True
+#for i in range(3):
+hold = generate_sentence()
+while stop:
+    if len(hold) <= 160:
+        #api.update_status(hold)
+        #time.sleep(900)#Tweet every 15 minutes
+        print hold
+        stop = False
+    else:
+        hold = generate_sentence()
+
 
 
 #  To make smarter have word frequency prefer nouns that follow other thingys. Have a larger data set.
