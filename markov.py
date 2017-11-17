@@ -4,12 +4,13 @@ from itertools import izip
 #Tweepy Magic
 # -*- coding: utf-8 -*-
 
-# Creat empty list to add words after split
+# Create empty list to add words after split
 tao = []
 
 def read_file():
-    # read files from three texts: Proverbs, Tao Te Ching, Dharmasala
-    with open('/home/user/markov/Proverbs.txt', 'r') as f, open('/home/user/markov/taotc.txt', 'r') as f2, open('/home/user/markov/dhammapada.txt') as f3:
+    # read files from three texts: Proverbs, Tao Te Ching, Dharmasala, and Islam wise sayings
+
+    with open('/home/user/markov/Proverbs.txt', 'r') as f, open('/home/user/markov/taotc.txt', 'r') as f2, open('/home/user/markov/dhammapada.txt') as f3, open('/home/user/markov/profmu.txt') as f4:
 
         #file2string = "".join([x for x in f2])
         """
@@ -19,11 +20,13 @@ def read_file():
             for word in x.lower().strip().split():
                 tao.append(word)
 
-"""
-        for x, y, z in izip(f, f2, f3):
+"""     # for loop through each file.
+        for x, y, z, p in izip(f, f2, f3, f4):
+            # separate period from word
             x = x.replace(".", " .")
             y = y.replace(".", " .")
             z = z.replace(".", " .")
+            p = p.replace(".", " .")
             for word in x.lower().strip().split():
             #empty.append(line.split())
                 tao.append(word)
@@ -31,88 +34,107 @@ def read_file():
                 tao.append(word)
             for word in z.lower().strip().split():
                 tao.append(word)
+            for word in p.lower().strip().split():
+                tao.append(word)
         #print tao
 read_file()
 
 master_dict = {}
 total = 0
+# iterate through  list of words
 for i in range(len(tao)-1):
+    # keep j one word ahead
     j = i + 1
-    t_w = tao[i]
-    j_w = tao[j]
-    if t_w not in master_dict:
-        master_dict[t_w] = {'_total':0}
-    w_d = master_dict[t_w]
+    current_word = tao[i]
+    next_word = tao[j]
 
-    if j_w not in w_d:
-       w_d[j_w] = 0
-    if j_w in w_d:
-        w_d[j_w] += 1
-        w_d['_total'] += 1
+    if current_word not in master_dict:
+        # add current_word to dictionary
+        # and give current_word a dictionary
+        # '_total' as its value
+        master_dict[current_word] = {'_total':0}
 
-#print master_dict
+    copy_dict = master_dict[current_word]
+
+    if next_word not in copy_dict:
+        # if next_word not in dictionary
+        # add it and set value to 0
+        copy_dict[next_word] = 0
+
+    if next_word in  copy_dict:
+        # if it is in the dict, increment
+        # it's value by 1
+        copy_dict[next_word] += 1
+        # increment total in entire dict by 1
+        copy_dict['_total'] += 1
+
 
 for i in master_dict:
     #print k
     #print master_dict[i]['total']
+    # for key, value pair in dictionary
     for k,v in master_dict[i].iteritems():
         if k != '_total':
+            # divide value/count by dictionary word total
             fraction = float(v)/float(master_dict[i]['_total'])
             value = master_dict[i]
+            # change value to fraction
             value[k] = fraction
             #print k, fraction
 
 #print master_dict
 
 def weighted_choice(choices):
-   total = sum(w for c, w in choices.iteritems() if c != '_total')
+   # total equals sum of all values in choices dictionary
+   total = sum(word for c, word in choices.iteritems() if c != '_total')
+    # r equals generated number between 0 and total
    r = random.uniform(0, total)
    #print choices
-   #print r
    upto = 0
-   for c, w in choices.iteritems():
+    # for key value pair in choices
+   for c, word in choices.iteritems():
+      # Ignore _total
       if c == '_total':
         continue
-      if upto + w >= r:
-         #print c
+        #if 0 + value of current word is >= r
+
+      if upto + word >= r:
+         #return current word
          return c
-      upto += w
+      #else add value of word to upto(which is originally 0)
+      upto += word
    assert False, "Shouldn't get here"
-
-# [ a a a b b c c c c c ]
-
-# { 1: a, 4: b, 6: c }
-
-# [ a * * b * c * * * * ]
-
-"""
-for i in range(20):
-   weighted_choice(master_dict['compassion'])
-"""
 
 def generate_sentence():
     #w = random.choice(master_dict.keys())
-    w = weighted_choice(master_dict['.'])
+    word = weighted_choice(master_dict['.'])
+    #creates string to add to
     string = ''
-    #for i in range(9):
-        #string+= (w)
 
     while True:
-        if w in ['.','!','?',',', ";"]:
-            string += w
+
+        if word in ['.','!','?',',', ";"]:
+            string += word
             break
+        #add space to string
         string+=(' ')
-        string+= (w)
-        w = weighted_choice(master_dict[w])
+        # add returned word to string
+        string+= (word)
+        # set word with a call to weighted_choice, with the value just used
+        word = weighted_choice(master_dict[word])
+    # cut off empty space in beginning of word and capitalize the first word
     return string[1:].capitalize()
 
 stop = True
-#for i in range(3):
+# holds value given from generate_sentence() function
 hold = generate_sentence()
+
 while stop:
+    # the tweet maximum is 160 char
     if len(hold) <= 160:
         #api.update_status(hold)
-        #time.sleep(900)#Tweet every 15 minutes
+        #time.sleep(900)
+        #Tweet every 15 minutes
         if len(hold) <= 152:
             print hold + " #wisdom"
             stop = False
