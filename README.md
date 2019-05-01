@@ -6,10 +6,10 @@ I will be using a matrix to determine the frequency of words that follow other w
 
 Twitterbot is @Aloidias. Please, join us.
 
-![](/markov1.png)
+![](Images/markov1.png)
 
-![](/markov2.png)
+![](Images/markov2.png)
 
-![](/markov3.png)
+![](Images/markov3.png)
 
-![](/markov4.png)
+![](Images/markov4.png)
