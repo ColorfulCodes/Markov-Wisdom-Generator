@@ -10,7 +10,7 @@ tao = []
 def read_file():
     # read files from three texts: Proverbs, Tao Te Ching, Dharmasala, and Islam wise sayings
 
-    with open('/home/user/markov/Proverbs.txt', 'r') as f, open('/home/user/markov/taotc.txt', 'r') as f2, open('/home/user/markov/dhammapada.txt') as f3, open('/home/user/markov/profmu.txt') as f4:
+    with open('/Users/CodeGem/Markov-Wisdom-Generator/Texts/prov.txt', 'r') as f, open('/Users/CodeGem/Markov-Wisdom-Generator/Texts/taotc.txt', 'r') as f2, open('/Users/CodeGem/Markov-Wisdom-Generator/Texts/dhammapada.txt') as f3, open('/Users/CodeGem/Markov-Wisdom-Generator/Texts/Proverbs.txt') as f4:
 
         #file2string = "".join([x for x in f2])
         """
@@ -125,25 +125,27 @@ def generate_sentence():
     # cut off empty space in beginning of word and capitalize the first word
     return string[1:].capitalize()
 
-stop = True
-# holds value given from generate_sentence() function
-hold = generate_sentence()
 
-while stop:
-    # the tweet maximum is 160 char
-    if len(hold) <= 160:
-        #api.update_status(hold)
-        #time.sleep(900)
-        #Tweet every 15 minutes
-        if len(hold) <= 152:
-            print hold + " #wisdom"
-            stop = False
+
+def run():
+    stop = True
+    # holds value given from generate_sentence() function
+    hold = generate_sentence()
+
+    while stop:
+        # the tweet maximum is 160 char
+        if len(hold) <= 160:
+            #api.update_status(hold)
+            #time.sleep(900)
+            #Tweet every 15 minutes
+            if len(hold) <= 152:
+                return hold + " #wisdom"
+            else:
+                return hold
         else:
-            print hold
-            stop = False
-    else:
-        hold = generate_sentence()
+            hold = generate_sentence()
 
+print run()
 
 
 #  To make smarter have word frequency prefer nouns that follow other thingys. Have a larger data set.
