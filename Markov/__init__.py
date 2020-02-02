@@ -1,52 +1,50 @@
 import random
-from itertools import izip
+
+from itertools import zip_longest
 
 #Tweepy Magic
 # -*- coding: utf-8 -*-
 
 # Create empty list to add words after split
-tao = []
+holdWords = []
 
 def read_file():
     # read files from three texts: Proverbs, Tao Te Ching, Dharmasala, and Islam wise sayings
 
-    with open('/Users/CodeGem/Markov-Wisdom-Generator/Texts/prov.txt', 'r') as f, open('/Users/CodeGem/Markov-Wisdom-Generator/Texts/taotc.txt', 'r') as f2, open('/Users/CodeGem/Markov-Wisdom-Generator/Texts/dhammapada.txt') as f3, open('/Users/CodeGem/Markov-Wisdom-Generator/Texts/Proverbs.txt') as f4:
+    with open('/home/codegem/code/Markov-Wisdom-Generator/Texts/prov.txt', 'r') as f, open('/home/codegem/code/Markov-Wisdom-Generator/Texts/taotc.txt', 'r') as f2, open('/home/codegem/code/Markov-Wisdom-Generator/Texts/dhammapada.txt') as f3, open('/home/codegem/code/Markov-Wisdom-Generator/Texts/Proverbs.txt') as f4:
 
-        #file2string = "".join([x for x in f2])
-        """
-
-        for x in f:
-            x = x.replace(".", " .")
-            for word in x.lower().strip().split():
-                tao.append(word)
-
-"""     # for loop through each file.
-        for x, y, z, p in izip(f, f2, f3, f4):
+        # for loop through each file.
+        for x, y, z, p in zip_longest(f, f2, f3, f4, fillvalue=''):
             # separate period from word
+            
             x = x.replace(".", " .")
             y = y.replace(".", " .")
             z = z.replace(".", " .")
             p = p.replace(".", " .")
             for word in x.lower().strip().split():
             #empty.append(line.split())
-                tao.append(word)
+                holdWords.append(word)
             for word in y.lower().strip().split():
-                tao.append(word)
+                holdWords.append(word)
             for word in z.lower().strip().split():
-                tao.append(word)
+                holdWords.append(word)
             for word in p.lower().strip().split():
-                tao.append(word)
-        #print tao
+                holdWords.append(word)
+        return holdWords
 read_file()
+
+#multiply longest file divided by file currently in
+# max(log(a), log(b))/log(a) (lines of file is a
+# or max(a,b)/a
 
 master_dict = {}
 total = 0
 # iterate through  list of words
-for i in range(len(tao)-1):
+for i in range(len(holdWords)-1):
     # keep j one word ahead
     j = i + 1
-    current_word = tao[i]
-    next_word = tao[j]
+    current_word = holdWords[i]
+    next_word = holdWords[j]
 
     if current_word not in master_dict:
         # add current_word to dictionary
@@ -73,7 +71,7 @@ for i in master_dict:
     #print k
     #print master_dict[i]['total']
     # for key, value pair in dictionary
-    for k,v in master_dict[i].iteritems():
+    for k,v in master_dict[i].items():
         if k != '_total':
             # divide value/count by dictionary word total
             fraction = float(v)/float(master_dict[i]['_total'])
@@ -86,13 +84,13 @@ for i in master_dict:
 
 def weighted_choice(choices):
    # total equals sum of all values in choices dictionary
-   total = sum(word for c, word in choices.iteritems() if c != '_total')
+   total = sum(word for c, word in choices.items() if c != '_total')
     # r equals generated number between 0 and total
    r = random.uniform(0, total)
    #print choices
    upto = 0
     # for key value pair in choices
-   for c, word in choices.iteritems():
+   for c, word in choices.items():
       # Ignore _total
       if c == '_total':
         continue
@@ -145,7 +143,7 @@ def run():
         else:
             hold = generate_sentence()
 
-print run()
+print(run())
 
 
 #  To make smarter have word frequency prefer nouns that follow other thingys. Have a larger data set.
