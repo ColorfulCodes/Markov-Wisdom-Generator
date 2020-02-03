@@ -17,7 +17,7 @@ def read_file():
         for x, y, z, p in zip_longest(f, f2, f3, f4, fillvalue=''):
             # separate period from word
             
-            x = x.replace(".", " .")
+            x = x.replace(".", " .").replace('\x00', '')
             y = y.replace(".", " .")
             z = z.replace(".", " .")
             p = p.replace(".", " .")
