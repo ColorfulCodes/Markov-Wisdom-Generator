@@ -1,5 +1,10 @@
 import random
-
+import tweepy
+import time
+from secret import *
+auth = tweepy.OAuthHandler(C_KEY, C_SECRET)  
+auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)  
+api = tweepy.API(auth)  
 from itertools import zip_longest
 
 #Tweepy Magic
@@ -22,7 +27,7 @@ def read_file():
             z = z.replace(".", " .")
             p = p.replace(".", " .")
             for word in x.lower().strip().split():
-            #empty.append(line.split())
+
                 holdWords.append(word)
             for word in y.lower().strip().split():
                 holdWords.append(word)
@@ -129,13 +134,14 @@ def run():
     stop = True
     # holds value given from generate_sentence() function
     hold = generate_sentence()
-
+    
     while stop:
+        print(hold)
         # the tweet maximum is 160 char
         if len(hold) <= 160:
-            #api.update_status(hold)
-            #time.sleep(900)
-            #Tweet every 15 minutes
+            api.update_status(hold)
+            # time.sleep(900)
+            # Tweet every 15 minutes
             if len(hold) <= 152:
                 return hold + " #wisdom"
             else:
@@ -143,7 +149,7 @@ def run():
         else:
             hold = generate_sentence()
 
-print(run())
+run()
 
 
 #  To make smarter have word frequency prefer nouns that follow other thingys. Have a larger data set.
